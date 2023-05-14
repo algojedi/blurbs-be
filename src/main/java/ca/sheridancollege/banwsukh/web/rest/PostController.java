@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,19 +26,25 @@ import lombok.AllArgsConstructor;
 
 //@CrossOrigin(origins="http://localhost:8080")
 @CrossOrigin(origins = "*")
-@RequestMapping("api/post")
+@RequestMapping("api")
 @RestController
 @AllArgsConstructor
 public class PostController {
 
 
 	@Autowired
-	private PostService postService;
+	private final PostService postService;
 
 
-	@GetMapping(value = {"/",""})
-	public List<Post> getPosts() {
-		return postService.findAll();
+//	@GetMapping(value = {"/",""})
+//	public List<Post> getPosts() {
+//		return postService.findAll();
+//	}
+
+	@GetMapping("/posts")
+	  public ResponseEntity<List<Post>> getAllPosts() {
+		  List<Post> posts = postService.findAll();
+		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
 
 	@PostMapping(value = {"", "/"})
