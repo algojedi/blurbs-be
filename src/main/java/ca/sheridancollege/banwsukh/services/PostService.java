@@ -8,7 +8,7 @@ public interface PostService {
 
 	public List<Post> findAll();
 	public Post findById(Long id);
-	public Post findByName(String name);
+//	public Post findByName(String name);
 	public Post save(Post post);
 	public void deleteById(Long id);
 }

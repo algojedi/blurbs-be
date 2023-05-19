@@ -19,8 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import ca.sheridancollege.banwsukh.beans.PostReq;
+import ca.sheridancollege.banwsukh.domain.AppUser;
 import ca.sheridancollege.banwsukh.domain.Post;
 import ca.sheridancollege.banwsukh.repositories.PostRepository;
+import ca.sheridancollege.banwsukh.services.AppUserService;
+import ca.sheridancollege.banwsukh.services.AppUserServiceImpl;
 import ca.sheridancollege.banwsukh.services.PostService;
 import lombok.AllArgsConstructor;
 
@@ -35,6 +39,9 @@ public class PostController {
 	@Autowired
 	private final PostService postService;
 
+	@Autowired
+	private final AppUserService appUserService;
+
 
 //	@GetMapping(value = {"/",""})
 //	public List<Post> getPosts() {
@@ -47,9 +54,19 @@ public class PostController {
 		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
 
-	@PostMapping(value = {"", "/"})
-	public Post save(@RequestBody Post post) {
-		return postService.save(post); 
+	@PostMapping("/post")
+	public ResponseEntity<Post> addPost(@RequestBody PostReq post) {
+//		return blogPostService.save(blogPost); 
+		Post p = new Post();
+//		System.out.println("-----");
+//		System.out.println(post.getUserId());
+//		System.out.println(post.getContent());
+		AppUser user = appUserService.findById(post.getUserId());
+		p.setAppUser(user);
+		p.setTitle(post.getTitle());
+		p.setContent(post.getContent());
+		Post savedPost = postService.save(p);
+		return new ResponseEntity<Post>(savedPost, HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = "/{id}")
@@ -58,7 +75,11 @@ public class PostController {
 		postService.deleteById(id);
 		
 	}
-	
+
+	@Override
+	public String toString() {
+		return super.toString() + "-------- : ) ------";
+	}
 	/*
 	@GetMapping(value = "/{id}")
 	public Post getAppointment(@PathVariable Long id) {

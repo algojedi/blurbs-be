@@ -29,10 +29,10 @@ public class PostServiceImpl implements PostService {
 		return postRepository.findById(id).get();
 	}
 
-	@Override
-	public Post findByName(String name) {
-		return postRepository.findByName(name);
-	}
+//	@Override
+//	public Post findByName(String name) {
+//		return postRepository.findByName(name);
+//	}
 	
 	@Override
 	public void deleteById(Long id) {

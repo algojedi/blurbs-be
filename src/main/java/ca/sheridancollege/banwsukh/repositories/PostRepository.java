@@ -10,7 +10,7 @@ import ca.sheridancollege.banwsukh.domain.Post;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-	Post findByName(String name);
+//	Post findByName(String name);
 	List<Post> findAllByOrderByCreationDateDesc();
 	
 
