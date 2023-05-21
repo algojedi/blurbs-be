@@ -1,6 +1,7 @@
 package ca.sheridancollege.banwsukh.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,12 +24,19 @@ public class AppUserPostRatingServiceImpl implements AppUserPostRatingService {
 		return appUserPostRatingRepository.findAll();
 	}
 
-	public AppUserPostRating findById(Long id) {
-		return appUserPostRatingRepository.findById(id).get();
+	public Optional<AppUserPostRating> findById(Long id) {
+	    return appUserPostRatingRepository.findById(id);
 	}
+
 
 	public AppUserPostRating save(AppUserPostRating appUserPostRating) {
 		return appUserPostRatingRepository.save(appUserPostRating);
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		appUserPostRatingRepository.deleteById(id);
+		
 	}
 
 }

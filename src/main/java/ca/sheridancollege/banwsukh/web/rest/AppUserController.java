@@ -33,25 +33,20 @@ import lombok.AllArgsConstructor;
 @RequestMapping("api")
 @RestController
 @AllArgsConstructor
-public class PostController {
-
-
-	@Autowired
-	private final PostService postService;
+public class AppUserController {
 
 	@Autowired
 	private final AppUserService appUserService;
 
-
-	@GetMapping("/posts")
-	  public ResponseEntity<List<Post>> getAllPosts() {
-		  List<Post> posts = postService.findAll();
-		return new ResponseEntity<>(posts, HttpStatus.OK);
+	@GetMapping("/users")
+	  public ResponseEntity<List<AppUser>> getAllUsers() {
+		  List<AppUser> users = appUserService.findAll();
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
-	@PostMapping("/post")
+	/*
+	@PostMapping("/user")
 	public ResponseEntity<Post> addPost(@RequestBody PostReq post) {
-//		return blogPostService.save(blogPost); 
 		Post p = new Post();
 		AppUser user = appUserService.findById(post.getUserId());
 		p.setAppUser(user);
@@ -61,50 +56,17 @@ public class PostController {
 		return new ResponseEntity<Post>(savedPost, HttpStatus.OK);
 	}
 
-	@DeleteMapping(value = "/post/{id}")
-	public void deletePost(@PathVariable Long id) {
+	@DeleteMapping(value = "/user/{id}")
+	public void deleteUser(@PathVariable Long id) {
 		System.out.println("reached post controller delete mapping with id: " + id);
 		postService.deleteById(id);
 		
 	}
+	*/
 
 	@Override
 	public String toString() {
-		return super.toString() + "-------- : ) ------";
-	}
-	
-	@GetMapping(value = "/post/{id}")
-	public Post getPost(@PathVariable Long id) {
-		return postService.findById(id); //.get();
-	}
-	
-	
-	/*
-
-	@PostMapping(consumes = "application/json")
-	public Post postAppointment(@RequestBody Post a) {
-		return studentRepository.save(a);
+		return super.toString() + "-------- USER ------";
 	}
 
-	@DeleteMapping(value = "/{id}")
-	public Post deleteAppointment(@PathVariable Long id) {
-		Post student = studentRepository.findById(id).get();
-		studentRepository.deleteById(id);
-		return student;
-	}
-
-	@PutMapping(consumes = "application/json")
-	public String putAppointmentCollection(@RequestBody List<Post> appointmentList) {
-		studentRepository.deleteAll();
-		studentRepository.saveAll(appointmentList);
-		return "Total Records: " + studentRepository.count();
-	}
-
-	@PutMapping(value = "/{id}")
-	public void updateAppointment(@RequestBody Post student) {
-		// TODO: Preconditions.checkNotNull(resource);
-		// RestPreconditions.checkNotNull(service.getById(resource.getId()));
-		studentRepository.save(student);
-	}
-	*/
 }
