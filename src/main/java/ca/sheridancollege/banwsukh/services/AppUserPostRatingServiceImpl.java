@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import ca.sheridancollege.banwsukh.domain.AppUser;
 import ca.sheridancollege.banwsukh.domain.AppUserPostRating;
+import ca.sheridancollege.banwsukh.exceptions.ResourceNotFoundException;
 import ca.sheridancollege.banwsukh.repositories.AppUserPostRatingRepository;
 //import ca.banwsukh.data.entities.UserPostRating;
 //import ca.banwsukh.repositories.UserPostRatingRepository;
@@ -33,10 +34,18 @@ public class AppUserPostRatingServiceImpl implements AppUserPostRatingService {
 		return appUserPostRatingRepository.save(appUserPostRating);
 	}
 
+//	@Override
+//	public void deleteById(Long id) {
+//		appUserPostRatingRepository.deleteById(id);
+//		
+//	}
+	
 	@Override
 	public void deleteById(Long id) {
-		appUserPostRatingRepository.deleteById(id);
-		
+	    if (!appUserPostRatingRepository.existsById(id)) {
+	        throw new ResourceNotFoundException("Resource not found with ID: " + id);
+	    }
+	    appUserPostRatingRepository.deleteById(id);
 	}
 
 }

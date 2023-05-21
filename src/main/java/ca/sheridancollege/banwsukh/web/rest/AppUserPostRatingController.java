@@ -24,6 +24,7 @@ import ca.sheridancollege.banwsukh.beans.PostReq;
 import ca.sheridancollege.banwsukh.domain.AppUser;
 import ca.sheridancollege.banwsukh.domain.AppUserPostRating;
 import ca.sheridancollege.banwsukh.domain.Post;
+import ca.sheridancollege.banwsukh.exceptions.ResourceNotFoundException;
 import ca.sheridancollege.banwsukh.repositories.PostRepository;
 import ca.sheridancollege.banwsukh.services.AppUserPostRatingService;
 import ca.sheridancollege.banwsukh.services.AppUserService;
@@ -67,8 +68,13 @@ public class AppUserPostRatingController {
 	*/
 
 	@DeleteMapping(value = "/{id}")
-	public void deleteAppUserPostRating(@PathVariable Long id) {
-		appUserPostRatingService.deleteById(id);
+	public ResponseEntity<Void> deleteAppUserPostRating(@PathVariable Long id) {
+	    try {
+	        appUserPostRatingService.deleteById(id);
+	        return ResponseEntity.noContent().build();
+	    } catch (ResourceNotFoundException e) {
+	        return ResponseEntity.notFound().build();
+	    }
 	}
 
 

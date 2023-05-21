@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import ca.sheridancollege.banwsukh.exceptions.ResourceNotFoundException;
+
 
 /* 
  *  A global exception handler
@@ -17,5 +19,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 	    public ResponseEntity<String> handleDataAccessException(DataAccessException ex) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database connection failure.");
 	    }
+	    
+	    @ExceptionHandler({ ResourceNotFoundException.class })
+	    public ResponseEntity<String> handleResourceNotFoundException(DataAccessException ex) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found");
+	    }
+	    
 	}
 
