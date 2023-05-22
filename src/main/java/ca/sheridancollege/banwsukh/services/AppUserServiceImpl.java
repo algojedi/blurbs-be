@@ -1,6 +1,7 @@
 package ca.sheridancollege.banwsukh.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,12 +24,11 @@ public class AppUserServiceImpl implements AppUserService {
 		return appUserRepository.findAll();
 	}
 
-	public AppUser findById(Long id) {
-		return appUserRepository.findById(id).get();
+	public Optional <AppUser> findById(Long id) {
+		return appUserRepository.findById(id);
 	}
 
-	public AppUser findByNameAndPassword(String username, String password) {
-//		return appUserRepository.findById(id).get();
+	public Optional<AppUser> findByNameAndPassword(String username, String password) {
 		return appUserRepository.findByNameAndPassword(username, password);
 	}
 

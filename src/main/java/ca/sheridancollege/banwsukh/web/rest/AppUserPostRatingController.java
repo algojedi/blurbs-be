@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import ca.sheridancollege.banwsukh.beans.AppUserPostRatingReq;
 import ca.sheridancollege.banwsukh.beans.PostReq;
 import ca.sheridancollege.banwsukh.domain.AppUser;
 import ca.sheridancollege.banwsukh.domain.AppUserPostRating;
@@ -32,7 +33,6 @@ import ca.sheridancollege.banwsukh.services.AppUserServiceImpl;
 import ca.sheridancollege.banwsukh.services.PostService;
 import lombok.AllArgsConstructor;
 
-//@CrossOrigin(origins="http://localhost:8080")
 @CrossOrigin(origins = "*")
 @RequestMapping("api")
 @RestController
@@ -40,11 +40,21 @@ import lombok.AllArgsConstructor;
 public class AppUserPostRatingController {
 
 
-//	@Autowired
-//	private final PostService postService;
-
-	@Autowired
 	private final AppUserPostRatingService appUserPostRatingService;
+	private final AppUserService appUserService;
+	private final PostService postService;
+	
+	
+	@GetMapping(value = "/rating/{id}")
+	public ResponseEntity<AppUserPostRating> getRating(@PathVariable Long id) {
+	    Optional<AppUserPostRating> ratingOptional = appUserPostRatingService.findById(id);
+	    if (ratingOptional.isPresent()) {
+	        AppUserPostRating rating = ratingOptional.get();
+	        return ResponseEntity.ok(rating);
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
+	}
 
 	@GetMapping("/ratings")
 	  public ResponseEntity<List<AppUserPostRating>> getAllRatings() {
@@ -52,20 +62,18 @@ public class AppUserPostRatingController {
 		return new ResponseEntity<>(ratings, HttpStatus.OK);
 	}
 
-	/*
 	@PostMapping("/rating")
-	public ResponseEntity<AppUserPostRating> addRating(@RequestBody AppUserPostRatingReq post) {
-		AppUserPostRating p = new AppUserPostRating();
-		AppUser user = appUserService.findById(post.getUserId());
-		p.setAppUser(user);
-		p.setTitle(post.getTitle());
-		p.setContent(post.getContent());
-		AppUserPostRating savedAppUserPostRating = postService.save(p);
-		return new ResponseEntity<AppUserPostRating>(savedAppUserPostRating, HttpStatus.OK);
+	public ResponseEntity<AppUserPostRating> addRating(@RequestBody AppUserPostRatingReq rating) {
+	    Optional<AppUser> user = appUserService.findById(rating.getUserId());
+	    Optional<Post> post = postService.findById(rating.getPostId());
+	    if (user.isEmpty() || post.isEmpty()) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	    }
+	    AppUserPostRating appUserPostRating = new AppUserPostRating(0L,user.get(), post.get(), rating.getRating());
+	    AppUserPostRating savedRating = appUserPostRatingService.save(appUserPostRating);
+	    return ResponseEntity.ok(savedRating);
 	}
 
-
-	*/
 
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> deleteAppUserPostRating(@PathVariable Long id) {
@@ -78,20 +86,5 @@ public class AppUserPostRatingController {
 	}
 
 
-	@GetMapping(value = "/rating/{id}")
-	public ResponseEntity<AppUserPostRating> getRating(@PathVariable Long id) {
-	    Optional<AppUserPostRating> ratingOptional = appUserPostRatingService.findById(id);
-	    if (ratingOptional.isPresent()) {
-	        AppUserPostRating rating = ratingOptional.get();
-	        return ResponseEntity.ok(rating);
-	    } else {
-	        return ResponseEntity.notFound().build();
-	    }
-	}
 
-
-	@Override
-	public String toString() {
-		return super.toString() + "-------- RATING ------";
-	}
 }

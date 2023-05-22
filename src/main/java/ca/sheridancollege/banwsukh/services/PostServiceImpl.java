@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,12 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public List<Post> findAll() {
-//		return postRepository.findAll();
 		return postRepository.findAllByOrderByCreationDateDesc();
 	}
 
 	@Override
-	public Post findById(Long id) {
-		return postRepository.findById(id).get();
+	public Optional<Post> findById(Long id) {
+		return postRepository.findById(id);
 	}
 
 //	@Override

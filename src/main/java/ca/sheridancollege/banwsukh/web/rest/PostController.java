@@ -4,7 +4,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,32 +31,35 @@ import ca.sheridancollege.banwsukh.services.AppUserServiceImpl;
 import ca.sheridancollege.banwsukh.services.PostService;
 import lombok.AllArgsConstructor;
 
-//@CrossOrigin(origins="http://localhost:8080")
 @CrossOrigin(origins = "*")
 @RequestMapping("api")
 @RestController
 @AllArgsConstructor
 public class PostController {
 
-
-	@Autowired
+//	@Autowired
 	private final PostService postService;
 
-	@Autowired
+//	@Autowired
 	private final AppUserService appUserService;
 
+	private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
 	@GetMapping("/posts")
-	  public ResponseEntity<List<Post>> getAllPosts() {
-		  List<Post> posts = postService.findAll();
+	public ResponseEntity<List<Post>> getAllPosts() {
+		List<Post> posts = postService.findAll();
+		logger.warn("testing logger!");
 		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
 
 	@PostMapping("/post")
 	public ResponseEntity<Post> addPost(@RequestBody PostReq post) {
-//		return blogPostService.save(blogPost); 
 		Post p = new Post();
-		AppUser user = appUserService.findById(post.getUserId());
+		Optional<AppUser> userOptional = appUserService.findById(post.getUserId());
+		if (userOptional.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		AppUser user = userOptional.get();
 		p.setAppUser(user);
 		p.setTitle(post.getTitle());
 		p.setContent(post.getContent());
@@ -65,46 +71,17 @@ public class PostController {
 	public void deletePost(@PathVariable Long id) {
 		System.out.println("reached post controller delete mapping with id: " + id);
 		postService.deleteById(id);
-		
+
 	}
 
 	@Override
 	public String toString() {
 		return super.toString() + "-------- : ) ------";
 	}
-	
+
 	@GetMapping(value = "/post/{id}")
-	public Post getPost(@PathVariable Long id) {
-		return postService.findById(id); //.get();
-	}
-	
-	
-	/*
-
-	@PostMapping(consumes = "application/json")
-	public Post postAppointment(@RequestBody Post a) {
-		return studentRepository.save(a);
+	public ResponseEntity<Post> getPost(@PathVariable Long id) {
+		return postService.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 
-	@DeleteMapping(value = "/{id}")
-	public Post deleteAppointment(@PathVariable Long id) {
-		Post student = studentRepository.findById(id).get();
-		studentRepository.deleteById(id);
-		return student;
-	}
-
-	@PutMapping(consumes = "application/json")
-	public String putAppointmentCollection(@RequestBody List<Post> appointmentList) {
-		studentRepository.deleteAll();
-		studentRepository.saveAll(appointmentList);
-		return "Total Records: " + studentRepository.count();
-	}
-
-	@PutMapping(value = "/{id}")
-	public void updateAppointment(@RequestBody Post student) {
-		// TODO: Preconditions.checkNotNull(resource);
-		// RestPreconditions.checkNotNull(service.getById(resource.getId()));
-		studentRepository.save(student);
-	}
-	*/
 }

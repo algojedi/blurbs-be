@@ -34,12 +34,6 @@ public class AppUserPostRatingServiceImpl implements AppUserPostRatingService {
 		return appUserPostRatingRepository.save(appUserPostRating);
 	}
 
-//	@Override
-//	public void deleteById(Long id) {
-//		appUserPostRatingRepository.deleteById(id);
-//		
-//	}
-	
 	@Override
 	public void deleteById(Long id) {
 	    if (!appUserPostRatingRepository.existsById(id)) {
