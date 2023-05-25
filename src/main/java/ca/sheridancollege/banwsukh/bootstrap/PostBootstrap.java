@@ -36,15 +36,9 @@ public class PostBootstrap implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		// Create instances of AppUser and set their properties
-		AppUser johnLennon = new AppUser();
-		johnLennon.setName("John Lennon");
-		johnLennon.setPassword("test");
-		AppUser paulMcCartney = new AppUser();
-		paulMcCartney.setName("Paul McCartney");
-		paulMcCartney.setPassword("test");
-		AppUser leonardCohen = new AppUser();
-		leonardCohen.setName("Leonard Cohen");
-		leonardCohen.setPassword("test");
+		AppUser johnLennon = AppUser.create("John Lennon", "test");
+		AppUser paulMcCartney = AppUser.create("Paul McCartney", "test");
+		AppUser leonardCohen = AppUser.create("Leonard Cohen", "test");
 
 		// Create instances of Post and set their properties
 		Post p1 = new Post();
@@ -66,7 +60,7 @@ public class PostBootstrap implements CommandLineRunner {
 		p1.setAppUser(johnLennon);
 		p2.setAppUser(paulMcCartney);
 		p3.setAppUser(leonardCohen);
-		
+
 		// Save the Post objects using the postService.save() method
 		p1 = postService.save(p1);
 		p2 = postService.save(p2);
@@ -80,5 +74,4 @@ public class PostBootstrap implements CommandLineRunner {
 		userPostRating = appUserPostRatingService.save(userPostRating);
 		postService.updateAverageRating(p1);
 	}
-
 }

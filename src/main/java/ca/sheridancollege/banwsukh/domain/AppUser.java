@@ -23,7 +23,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -34,26 +34,29 @@ public class AppUser {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	
+
 	@JsonIgnore
 	private String password;
-
-//	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//	@JoinColumn(name = "app_user_id")
-//	private Set<Post> posts = new HashSet<Post>();
 
 	public AppUser(String name) {
 		this.name = name;
 	}
+
+	public static AppUser create(String name, String password) {
+		AppUser appUser = new AppUser();
+		appUser.setName(name);
+		appUser.setPassword(password);
+		return appUser;
+	}
 }
 
-
-	// This method may make a little more sense for 'likedPosts'
-	/*
-	@JsonIgnore
-	@ManyToMany
-    @JoinTable(name = "app_user_posts",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "post_id"))
-    private Set<Post> posts = new HashSet<>();
-    */
+// This method may make a little more sense for 'likedPosts'
+/*
+ * @JsonIgnore
+ * 
+ * @ManyToMany
+ * 
+ * @JoinTable(name = "app_user_posts", joinColumns = @JoinColumn(name =
+ * "user_id"), inverseJoinColumns = @JoinColumn(name = "post_id")) private
+ * Set<Post> posts = new HashSet<>();
+ */
