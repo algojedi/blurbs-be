@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class PostReq {
     private String title;
     private String content;
-//    private int rating;
     private long userId;
 }

@@ -11,13 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ca.sheridancollege.banwsukh.domain.Post;
+import ca.sheridancollege.banwsukh.repositories.AppUserPostRatingRepository;
 import ca.sheridancollege.banwsukh.repositories.PostRepository;
 
 @Service
 public class PostServiceImpl implements PostService {
-	
+
 	@Autowired
 	private PostRepository postRepository;
+
+	@Autowired
+	private AppUserPostRatingService appUserPostRatingService;
 
 	@Override
 	public List<Post> findAll() {
@@ -29,17 +33,11 @@ public class PostServiceImpl implements PostService {
 		return postRepository.findById(id);
 	}
 
-//	@Override
-//	public Post findByName(String name) {
-//		return postRepository.findByName(name);
-//	}
-	
 	@Override
 	public void deleteById(Long id) {
 		postRepository.deleteById(id);
 		return;
 	}
-
 
 	@Override
 	public Post save(Post post) {
@@ -49,6 +47,20 @@ public class PostServiceImpl implements PostService {
 		post.setCreationDate(LocalDateTime.now());
 		return postRepository.save(post);
 	}
-	
 
+	public void updateAverageRating(Post post) {
+		Double averageRating = postRepository.calculateAverageRating(post);
+		post.setAverageRating(averageRating);
+		postRepository.save(post);
+	}
+	/*
+	 * public void calculateAndUpdateAverageRating(Post post) { // Retrieve the
+	 * ratings associated with the post List<Double> ratings =
+	 * appUserPostRatingService.getRatingsByPost(post); if (!ratings.isEmpty()) { //
+	 * Calculate the average rating double sum = 0.0; for (Double rating : ratings)
+	 * { sum += rating; } double averageRating = sum / ratings.size();
+	 * post.setAverageRating(averageRating); } else { // No ratings available, set
+	 * average rating to null or a default value post.setAverageRating(null); }
+	 * postRepository.save(post); }
+	 */
 }

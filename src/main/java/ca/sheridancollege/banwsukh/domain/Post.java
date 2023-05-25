@@ -36,6 +36,7 @@ public class Post {
 	private String title;
 	private String content;
 	private LocalDateTime creationDate;
+	private Double averageRating;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "app_user_id", nullable = false)

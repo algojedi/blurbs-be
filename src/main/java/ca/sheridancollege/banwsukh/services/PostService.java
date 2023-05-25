@@ -8,7 +8,13 @@ import ca.sheridancollege.banwsukh.domain.Post;
 public interface PostService {
 
 	public List<Post> findAll();
+
 	public Optional<Post> findById(Long id);
+
 	public Post save(Post post);
+
 	public void deleteById(Long id);
+
+//	public void calculateAndUpdateAverageRating(Post post);
+	public void updateAverageRating(Post post);
 }

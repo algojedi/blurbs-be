@@ -10,6 +10,7 @@ import ca.sheridancollege.banwsukh.beans.AppUserPostRatingReq;
 import ca.sheridancollege.banwsukh.beans.AppUserReq;
 import ca.sheridancollege.banwsukh.domain.AppUser;
 import ca.sheridancollege.banwsukh.domain.AppUserPostRating;
+import ca.sheridancollege.banwsukh.domain.Post;
 
 
 public interface AppUserPostRatingService {
@@ -18,5 +19,6 @@ public interface AppUserPostRatingService {
 	public List<AppUserPostRating> findAll();
 	public Optional<AppUserPostRating> findById(Long id);
 	public void deleteById(Long id);
+	public List<Double> getRatingsByPost(Post post);
 
 }

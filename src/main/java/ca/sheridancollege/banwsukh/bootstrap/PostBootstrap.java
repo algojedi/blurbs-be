@@ -30,7 +30,7 @@ public class PostBootstrap implements CommandLineRunner {
 	private AppUserPostRatingService appUserPostRatingService;
 
 	@Autowired
-	private AppUserServiceImpl appUserService;
+	private AppUserService appUserService;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -59,19 +59,14 @@ public class PostBootstrap implements CommandLineRunner {
 		p3.setTitle("Hallelujah");
 		p3.setContent("Now I've heard there was a secret chord...");
 
-		// Retrieve the respective AppUser objects for each post based on their names
-//		AppUser userJohn = appUserService.findByNameAndPassword("John Lennon", "test");
-//		AppUser userPaul = appUserService.findByNameAndPassword("Paul McCartney", "test");
-//		AppUser userLeonard = appUserService.findByNameAndPassword("Leonard Cohen", "test");
-
 		// Assign the retrieved AppUser objects to the AppUser property of each Post
-		johnLennon = appUserService.save(johnLennon);
-		paulMcCartney = appUserService.save(paulMcCartney);
-		leonardCohen = appUserService.save(leonardCohen);
+		appUserService.save(johnLennon);
+		appUserService.save(paulMcCartney);
+		appUserService.save(leonardCohen);
 		p1.setAppUser(johnLennon);
 		p2.setAppUser(paulMcCartney);
 		p3.setAppUser(leonardCohen);
-
+		
 		// Save the Post objects using the postService.save() method
 		p1 = postService.save(p1);
 		p2 = postService.save(p2);
@@ -82,7 +77,8 @@ public class PostBootstrap implements CommandLineRunner {
 		userPostRating.setPost(p1);
 		userPostRating.setUser(leonardCohen);
 		userPostRating.setRating(4.5);
-		appUserPostRatingService.save(userPostRating);
+		userPostRating = appUserPostRatingService.save(userPostRating);
+		postService.updateAverageRating(p1);
 	}
 
 }

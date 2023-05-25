@@ -17,7 +17,7 @@ public class AppUserServiceImpl implements AppUserService {
 	
 	@Autowired
 	private AppUserRepository appUserRepository;
-	@Autowired
+//	@Autowired
 //	private UserPostRatingRepository userPostRatingRepository;
 
 	public List<AppUser> findAll() {
