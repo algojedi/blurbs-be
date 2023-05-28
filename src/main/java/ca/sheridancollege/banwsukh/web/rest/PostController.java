@@ -52,6 +52,11 @@ public class PostController {
 		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
 
+	@GetMapping(value = "/posts/{id}")
+	public ResponseEntity<Post> getPost(@PathVariable Long id) {
+		return postService.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+	}
+
 	@PostMapping("/post")
 	public ResponseEntity<Post> addPost(@RequestBody PostReq post) {
 		Post p = new Post();
@@ -67,7 +72,7 @@ public class PostController {
 		return new ResponseEntity<Post>(savedPost, HttpStatus.OK);
 	}
 
-	@DeleteMapping(value = "/post/{id}")
+	@DeleteMapping(value = "/posts/{id}")
 	public void deletePost(@PathVariable Long id) {
 		System.out.println("reached post controller delete mapping with id: " + id);
 		postService.deleteById(id);
@@ -79,9 +84,5 @@ public class PostController {
 		return super.toString() + "-------- : ) ------";
 	}
 
-	@GetMapping(value = "/post/{id}")
-	public ResponseEntity<Post> getPost(@PathVariable Long id) {
-		return postService.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-	}
 
 }
