@@ -51,28 +51,23 @@ public class PostBootstrap implements CommandLineRunner {
 
 	    // Create instances of Post and set their properties
 	    Post p1 = new Post();
-	    p1.setTitle("All You Need is Love");
-	    p1.setContent("There's nothing you can sing that can't be sung...");
+	    p1.setQuillContent("There's nothing you can sing that can't be sung...");
 	    p1.setAppUser(johnLennon);
 
 	    Post p2 = new Post();
-	    p2.setTitle("Let it Be");
-	    p2.setContent("When I find myself in times of trouble...");
+	    p2.setQuillContent("When I find myself in times of trouble...");
 	    p2.setAppUser(paulMcCartney);
 
 	    Post p3 = new Post();
-	    p3.setTitle("Hallelujah");
-	    p3.setContent("Now I've heard there was a secret chord...");
+	    p3.setQuillContent("Now I've heard there was a secret chord...");
 	    p3.setAppUser(leonardCohen);
 
 	    Post p4 = new Post();
-	    p4.setTitle("Blowin' in the Wind");
-	    p4.setContent("How many roads must a man walk down...");
+	    p4.setQuillContent("How many roads must a man walk down...");
 	    p4.setAppUser(bobDylan);
 
 	    Post p5 = new Post();
-	    p5.setTitle("Space Oddity");
-	    p5.setContent("Ground Control to Major Tom...");
+	    p5.setQuillContent("Ground Control to Major Tom...");
 	    p5.setAppUser(davidBowie);
 
 	    // Save the Post objects using the postService.save() method

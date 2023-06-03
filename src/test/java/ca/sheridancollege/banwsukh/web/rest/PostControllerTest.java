@@ -42,7 +42,7 @@ class PostControllerTest {
 		PostReq postReq = new PostReq();
 		postReq.setUserId(1L);
 		postReq.setTitle("Test Title");
-		postReq.setContent("Test Content");
+		postReq.setQuillContent("Test Content");
 
 		// Mock behavior of appUserService.findById()
 		AppUser user = new AppUser();

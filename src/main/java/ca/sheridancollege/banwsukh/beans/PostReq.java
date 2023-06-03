@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class PostReq {
-    private String title;
-    private String content;
+//    private String title;
+    private String quillContent;
+    private String htmlContent;
     private long userId;
 }

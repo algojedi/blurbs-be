@@ -31,7 +31,8 @@ import ca.sheridancollege.banwsukh.services.AppUserServiceImpl;
 import ca.sheridancollege.banwsukh.services.PostService;
 import lombok.AllArgsConstructor;
 
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://127.0.0.1:5173")
 @RequestMapping("api")
 @RestController
 @AllArgsConstructor
@@ -62,12 +63,12 @@ public class PostController {
 		Post p = new Post();
 		Optional<AppUser> userOptional = appUserService.findById(post.getUserId());
 		if (userOptional.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
 		AppUser user = userOptional.get();
 		p.setAppUser(user);
-		p.setTitle(post.getTitle());
-		p.setContent(post.getContent());
+//		p.setTitle(post.getTitle());
+		p.setQuillContent(post.getQuillContent());
 		Post savedPost = postService.save(p);
 		return new ResponseEntity<Post>(savedPost, HttpStatus.OK);
 	}

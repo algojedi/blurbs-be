@@ -33,8 +33,9 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@NonNull
-	private String title;
-	private String content;
+//	private String title;
+	private String quillContent;
+	private String htmlContent;
 	private LocalDateTime creationDate;
 	private Double averageRating;
 	
