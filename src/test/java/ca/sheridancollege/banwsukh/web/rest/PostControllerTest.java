@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,14 +33,11 @@ class PostControllerTest {
     @InjectMocks
     private PostController postController;
 
-//    @Before
-
 	@Test
 	public void testAddPost() {
 		// Mock data
 		PostReq postReq = new PostReq();
 		postReq.setUserId(1L);
-		postReq.setTitle("Test Title");
 		postReq.setQuillContent("Test Content");
 
 		// Mock behavior of appUserService.findById()
