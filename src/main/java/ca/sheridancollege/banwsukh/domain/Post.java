@@ -3,6 +3,7 @@ package ca.sheridancollege.banwsukh.domain;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -34,7 +35,9 @@ public class Post {
 	private Long id;
 	@NonNull
 //	private String title;
+	@Column(columnDefinition = "LONGTEXT") 
 	private String quillContent;
+	@Column(columnDefinition = "LONGTEXT") 
 	private String htmlContent;
 	private LocalDateTime creationDate;
 	private Double averageRating;

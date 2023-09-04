@@ -50,6 +50,8 @@ public class PostController {
 	public ResponseEntity<List<Post>> getAllPosts() {
 		List<Post> posts = postService.findAll();
 		logger.warn("testing logger!");
+		System.out.println("writin gout the posts...");
+		System.out.println(posts.get(0));
 		return new ResponseEntity<>(posts, HttpStatus.OK);
 	}
 
