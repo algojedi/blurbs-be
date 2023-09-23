@@ -38,10 +38,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PostController {
 
-//	@Autowired
 	private final PostService postService;
 
-//	@Autowired
 	private final AppUserService appUserService;
 
 	private static final Logger logger = LoggerFactory.getLogger(PostController.class);
@@ -60,6 +58,7 @@ public class PostController {
 		return postService.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 
+	// TODO: make use of tags in post request body.
 	@PostMapping("/post")
 	public ResponseEntity<Post> addPost(@RequestBody PostReq post) {
 		Post p = new Post();
