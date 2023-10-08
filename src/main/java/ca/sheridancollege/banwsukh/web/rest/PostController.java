@@ -5,12 +5,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.object.UpdatableSqlQuery;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +31,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ca.sheridancollege.banwsukh.beans.PostReq;
 import ca.sheridancollege.banwsukh.domain.AppUser;
 import ca.sheridancollege.banwsukh.domain.Post;
+import ca.sheridancollege.banwsukh.domain.Tag;
 import ca.sheridancollege.banwsukh.repositories.PostRepository;
+import ca.sheridancollege.banwsukh.repositories.TagRepository;
 import ca.sheridancollege.banwsukh.services.AppUserService;
 import ca.sheridancollege.banwsukh.services.AppUserServiceImpl;
 import ca.sheridancollege.banwsukh.services.PostService;
@@ -39,6 +47,8 @@ import lombok.AllArgsConstructor;
 public class PostController {
 
 	private final PostService postService;
+
+	private final TagRepository tagRepository;
 
 	private final AppUserService appUserService;
 
@@ -58,21 +68,41 @@ public class PostController {
 		return postService.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 
-	// TODO: make use of tags in post request body.
 	@PostMapping("/post")
 	public ResponseEntity<Post> addPost(@RequestBody PostReq post) {
 		Post p = new Post();
+		List<Tag> newTags = new ArrayList<>();
+		List<Tag> dbTags = new ArrayList<>();
+		for (String tagToAdd : post.getTags()) {
+			if (tagRepository.existsByName(tagToAdd)) {
+				dbTags.add(tagRepository.findByName(tagToAdd).get().get(0));
+			} else {
+				newTags.add(new Tag(tagToAdd));
+			}
+		}
+		Set<Tag> allTags = Stream.concat(newTags.stream(), dbTags.stream()).collect(Collectors.toSet());
+
 		Optional<AppUser> userOptional = appUserService.findById(post.getUserId());
 		if (userOptional.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
+
 		AppUser user = userOptional.get();
+
 		p.setAppUser(user);
-//		p.setTitle(post.getTitle());
 		p.setQuillContent(post.getQuillContent());
 		p.setHtmlContent(post.getHtmlContent());
-		Post savedPost = postService.save(p);
-		return new ResponseEntity<Post>(savedPost, HttpStatus.OK);
+
+		try {
+			p.addTags(allTags);
+			List<Tag> updatedTags = tagRepository.saveAll(allTags);
+			return new ResponseEntity<>(p, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO: log exception
+			System.out.println(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+
 	}
 
 	@DeleteMapping(value = "/posts/{id}")
@@ -86,6 +116,5 @@ public class PostController {
 	public String toString() {
 		return super.toString() + "-------- : ) ------";
 	}
-
 
 }

@@ -13,6 +13,7 @@ import ca.sheridancollege.banwsukh.beans.AppUserReq;
 import ca.sheridancollege.banwsukh.domain.AppUser;
 import ca.sheridancollege.banwsukh.domain.AppUserPostRating;
 import ca.sheridancollege.banwsukh.domain.Post;
+import ca.sheridancollege.banwsukh.domain.Tag;
 import ca.sheridancollege.banwsukh.services.AppUserPostRatingService;
 import ca.sheridancollege.banwsukh.services.AppUserService;
 import ca.sheridancollege.banwsukh.services.AppUserServiceImpl;
@@ -81,6 +82,10 @@ public class PostBootstrap implements CommandLineRunner {
 	    p3 = postService.save(p3);
 	    p4 = postService.save(p4);
 	    p5 = postService.save(p5);
+	    
+	    // TODO: attach this to a post
+	    Tag t1 = new Tag();
+	    t1.setName("music");
 
 	    // Save ratings
 	    AppUserPostRating userPostRating1 = new AppUserPostRating();

@@ -44,7 +44,7 @@ public class PostServiceImpl implements PostService {
 //		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 //        String formattedDateTime = LocalDateTime.now().format(formatter);
 //		post.setCreationDate(formattedDateTime);
-		post.setCreationDate(LocalDateTime.now());
+//		post.setCreationDate(LocalDateTime.now());
 		return postRepository.save(post);
 	}
 

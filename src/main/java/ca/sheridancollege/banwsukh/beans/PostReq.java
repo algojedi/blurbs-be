@@ -12,4 +12,5 @@ public class PostReq {
     private String quillContent;
     private String htmlContent;
     private long userId;
+    private String[] tags;
 }
