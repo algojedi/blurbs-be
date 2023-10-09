@@ -3,6 +3,7 @@ package ca.sheridancollege.banwsukh.web.rest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -37,6 +38,7 @@ import ca.sheridancollege.banwsukh.repositories.TagRepository;
 import ca.sheridancollege.banwsukh.services.AppUserService;
 import ca.sheridancollege.banwsukh.services.AppUserServiceImpl;
 import ca.sheridancollege.banwsukh.services.PostService;
+import ca.sheridancollege.banwsukh.services.TagService;
 import lombok.AllArgsConstructor;
 
 @CrossOrigin(origins = "*")
@@ -45,10 +47,9 @@ import lombok.AllArgsConstructor;
 @RestController
 @AllArgsConstructor
 public class PostController {
-
 	private final PostService postService;
 
-	private final TagRepository tagRepository;
+	private final TagService tagService;
 
 	private final AppUserService appUserService;
 
@@ -71,16 +72,16 @@ public class PostController {
 	@PostMapping("/post")
 	public ResponseEntity<Post> addPost(@RequestBody PostReq post) {
 		Post p = new Post();
-		List<Tag> newTags = new ArrayList<>();
-		List<Tag> dbTags = new ArrayList<>();
-		for (String tagToAdd : post.getTags()) {
-			if (tagRepository.existsByName(tagToAdd)) {
-				dbTags.add(tagRepository.findByName(tagToAdd).get().get(0));
-			} else {
-				newTags.add(new Tag(tagToAdd));
-			}
-		}
-		Set<Tag> allTags = Stream.concat(newTags.stream(), dbTags.stream()).collect(Collectors.toSet());
+		// TODO: validate post include tag names uniqueness
+		List<String> tagsList = Arrays.asList(post.getTags()); // Convert array to list
+		Set<String> tagNames = new HashSet<>(tagsList); 
+		Set<Tag> existingTags = tagService.findExistingTagNames(tagNames);
+		Set<Tag> newTagsList = tagNames.stream()
+		        .map(tagName -> existingTags.stream()
+		                .filter(tag -> tag.getName().equals(tagName))
+		                .findFirst()
+		                .orElse(new Tag(tagName)))
+		        .collect(Collectors.toSet());
 
 		Optional<AppUser> userOptional = appUserService.findById(post.getUserId());
 		if (userOptional.isEmpty()) {
@@ -94,8 +95,8 @@ public class PostController {
 		p.setHtmlContent(post.getHtmlContent());
 
 		try {
-			p.addTags(allTags);
-			List<Tag> updatedTags = tagRepository.saveAll(allTags);
+			p.addTags(newTagsList);
+			Set<Tag> updatedTags = tagService.saveAll(newTagsList);
 			return new ResponseEntity<>(p, HttpStatus.OK);
 		} catch (Exception e) {
 			// TODO: log exception
