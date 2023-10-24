@@ -72,8 +72,12 @@ public class PostController {
 	@PostMapping("/post")
 	public ResponseEntity<Post> addPost(@RequestBody PostReq post) {
 		Post p = new Post();
-		// TODO: validate post include tag names uniqueness
-		List<String> tagsList = Arrays.asList(post.getTags()); // Convert array to list
+
+		// TODO: validate post using Validators
+
+		System.out.println("post tags in controller are ...");
+		System.out.println(post.getTags());
+		List<String> tagsList = post.getTags();
 		Set<String> tagNames = new HashSet<>(tagsList); 
 		Set<Tag> existingTags = tagService.findExistingTagNames(tagNames);
 		Set<Tag> newTagsList = tagNames.stream()
@@ -99,11 +103,9 @@ public class PostController {
 			Set<Tag> updatedTags = tagService.saveAll(newTagsList);
 			return new ResponseEntity<>(p, HttpStatus.OK);
 		} catch (Exception e) {
-			// TODO: log exception
 			System.out.println(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
-
 	}
 
 	@DeleteMapping(value = "/posts/{id}")

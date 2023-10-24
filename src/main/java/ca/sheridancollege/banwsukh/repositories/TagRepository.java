@@ -1,5 +1,6 @@
 package ca.sheridancollege.banwsukh.repositories;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -9,9 +10,8 @@ import ca.sheridancollege.banwsukh.domain.Tag;
 
 public interface TagRepository extends JpaRepository<Tag, Long> {
     boolean existsByName(String name);
-	Set<Tag> saveAll(Set<Tag> tags);
     Optional<Tag> findByName(String name);
-	Set<Tag> findNamesByNameIn(Set<String> tagNames);
+//	Set<Tag> findNamesByNameIn(Set<String> tagNames);
+	List<Tag> findNamesByNameIn(List<String> tagNames);
 	void deleteById(Long id); 
-	
 }

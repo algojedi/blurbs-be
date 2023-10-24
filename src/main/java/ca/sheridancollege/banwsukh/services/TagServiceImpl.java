@@ -1,6 +1,8 @@
 package ca.sheridancollege.banwsukh.services;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -45,12 +47,13 @@ public class TagServiceImpl implements TagService {
 
 	@Override
 	public Set<Tag> saveAll(Set<Tag> tags) {
-		return tagRepository.saveAll(tags);
+		List<Tag> savedTags = tagRepository.saveAll(tags);
+		return new HashSet<>(savedTags);
 	}
 	
 	 public Set<Tag> findExistingTagNames(Set<String> tagNames) {
-//	        Set<String> existingTagNames = tagRepository.findNamesByNameIn(tagNames);
-	        return tagRepository.findNamesByNameIn(tagNames);
+	        return new HashSet<>(tagRepository.findNamesByNameIn(new ArrayList<>(tagNames)));
+//	        return tagRepository.findNamesByNameIn(tagNames);
 //	        return new HashSet<>(existingTagNames);
 	    }
 
