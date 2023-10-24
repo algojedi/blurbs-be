@@ -28,17 +28,17 @@ import ca.sheridancollege.banwsukh.services.TagService;
 @ExtendWith(MockitoExtension.class)
 class PostControllerTest {
 
-    @Mock
-    private PostService postService;
+	@Mock
+	private PostService postService;
 
-    @Mock
-    private AppUserService appUserService;
+	@Mock
+	private AppUserService appUserService;
 
-    @Mock
-    private TagService tagService;
+	@Mock
+	private TagService tagService;
 
-    @InjectMocks
-    private PostController postController;
+	@InjectMocks
+	private PostController postController;
 
 	@Test
 	public void testAddPost() {
@@ -53,25 +53,66 @@ class PostControllerTest {
 		user.setId(1L);
 		Optional<AppUser> userOptional = Optional.of(user);
 		when(appUserService.findById(1L)).thenReturn(userOptional);
-		
+
 		// Mock behavior of tagService.findExistingTagNames() and tagService.saveAll()
-        Set<Tag> existingTags = new HashSet<>();
-        Set<Tag> newTagsList = new HashSet<>();
-        when(tagService.findExistingTagNames(any())).thenReturn(existingTags);
-        when(tagService.saveAll(any())).thenReturn(newTagsList);
+		Set<Tag> existingTags = new HashSet<>();
+		Set<Tag> newTagsList = new HashSet<>();
+		when(tagService.findExistingTagNames(any())).thenReturn(existingTags);
+		when(tagService.saveAll(any())).thenReturn(newTagsList);
 
 		ResponseEntity<Post> response = postController.addPost(postReq);
 
 		// Verify the expected behavior
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		
+
 		assertEquals(user, response.getBody().getAppUser());
-        assertEquals("Test Content", response.getBody().getQuillContent());
-        assertEquals("Valid HTML Content", response.getBody().getHtmlContent());
+		assertEquals("Test Content", response.getBody().getQuillContent());
+		assertEquals("Valid HTML Content", response.getBody().getHtmlContent());
 
 		// Verify that appUserService.findById() was called with the correct argument
 		verify(appUserService).findById(postReq.getUserId());
 		verify(tagService).findExistingTagNames(any());
-        verify(tagService).saveAll(any());
+		verify(tagService).saveAll(any());
+	}
+
+	// TODO: need to run the bottom two test cases to see if they work
+
+	@Test
+	public void testAddPost_InvalidHtmlContent() {
+		// Mock data with invalid HTML content (less than 5 characters)
+		PostReq postReq = new PostReq();
+		postReq.setUserId(1L);
+		postReq.setQuillContent("Test Content");
+		postReq.setHtmlContent("Short"); // Does not meet the validation criteria
+
+		// Mock behavior of appUserService.findById()
+		AppUser user = new AppUser();
+		user.setId(1L);
+		Optional<AppUser> userOptional = Optional.of(user);
+		when(appUserService.findById(1L)).thenReturn(userOptional);
+
+		// Call the method under test
+		ResponseEntity<Post> response = postController.addPost(postReq);
+
+		// Verify that the response is a BAD REQUEST status
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+	}
+
+	@Test
+	public void testAddPost_UserNotFound() {
+		// Mock data with a user not found in appUserService
+		PostReq postReq = new PostReq();
+		postReq.setUserId(1L);
+		postReq.setQuillContent("Test Content");
+		postReq.setHtmlContent("Valid HTML Content");
+
+		// Mock behavior of appUserService.findById() to return an empty Optional
+		when(appUserService.findById(1L)).thenReturn(Optional.empty());
+
+		// Call the method under test
+		ResponseEntity<Post> response = postController.addPost(postReq);
+
+		// Verify that the response is a BAD REQUEST status
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 	}
 }

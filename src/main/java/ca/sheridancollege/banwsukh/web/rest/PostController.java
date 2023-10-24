@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,22 +71,15 @@ public class PostController {
 	}
 
 	@PostMapping("/post")
-	public ResponseEntity<Post> addPost(@RequestBody PostReq post) {
+	public ResponseEntity<Post> addPost(@RequestBody @Valid PostReq post) {
 		Post p = new Post();
 
-		// TODO: validate post using Validators
-
-		System.out.println("post tags in controller are ...");
-		System.out.println(post.getTags());
 		List<String> tagsList = post.getTags();
-		Set<String> tagNames = new HashSet<>(tagsList); 
+		Set<String> tagNames = new HashSet<>(tagsList);
 		Set<Tag> existingTags = tagService.findExistingTagNames(tagNames);
-		Set<Tag> newTagsList = tagNames.stream()
-		        .map(tagName -> existingTags.stream()
-		                .filter(tag -> tag.getName().equals(tagName))
-		                .findFirst()
-		                .orElse(new Tag(tagName)))
-		        .collect(Collectors.toSet());
+		Set<Tag> newTagsList = tagNames.stream().map(tagName -> existingTags.stream()
+				.filter(tag -> tag.getName().equals(tagName)).findFirst().orElse(new Tag(tagName)))
+				.collect(Collectors.toSet());
 
 		Optional<AppUser> userOptional = appUserService.findById(post.getUserId());
 		if (userOptional.isEmpty()) {
