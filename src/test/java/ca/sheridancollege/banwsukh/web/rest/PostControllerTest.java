@@ -75,7 +75,7 @@ class PostControllerTest {
 		verify(tagService).saveAll(any());
 	}
 
-	// TODO: need to run the bottom two test cases to see if they work
+	// TODO: error: status of 200 being returned, causing test to fail
 
 	@Test
 	public void testAddPost_InvalidHtmlContent() {
@@ -83,7 +83,7 @@ class PostControllerTest {
 		PostReq postReq = new PostReq();
 		postReq.setUserId(1L);
 		postReq.setQuillContent("Test Content");
-		postReq.setHtmlContent("Short"); // Does not meet the validation criteria
+		postReq.setHtmlContent("Sh"); // Does not meet the validation criteria
 
 		// Mock behavior of appUserService.findById()
 		AppUser user = new AppUser();

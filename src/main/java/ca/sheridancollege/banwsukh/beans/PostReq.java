@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class PostReq {
 //    private String title;
     private String quillContent;
-    @Size(min = 10, message = "content should have at least 4 characters")
+    @Size(min = 10, message = "content should have at least 10 characters")
     private String htmlContent;
     @NotNull
     private long userId;
