@@ -1,9 +1,5 @@
 package ca.sheridancollege.banwsukh.services;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import ca.sheridancollege.banwsukh.domain.Post;
 import ca.sheridancollege.banwsukh.domain.Tag;
-import ca.sheridancollege.banwsukh.repositories.AppUserPostRatingRepository;
 import ca.sheridancollege.banwsukh.repositories.PostRepository;
 import ca.sheridancollege.banwsukh.repositories.TagRepository;
 

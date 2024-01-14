@@ -83,7 +83,8 @@ class PostControllerTest {
 		PostReq postReq = new PostReq();
 		postReq.setUserId(1L);
 		postReq.setQuillContent("Test Content");
-		postReq.setHtmlContent("Sh"); // Does not meet the validation criteria
+		// 'Sh' does not meet the length validation criteria
+		postReq.setHtmlContent("Sh"); 
 
 		// Mock behavior of appUserService.findById()
 		AppUser user = new AppUser();

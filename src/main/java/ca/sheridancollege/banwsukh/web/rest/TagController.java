@@ -25,7 +25,7 @@ import lombok.AllArgsConstructor;
 @CrossOrigin(origins = "*")
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/tags")
+@RequestMapping("/api")
 public class TagController {
 	
 	private final PostService postService;
@@ -36,13 +36,9 @@ public class TagController {
 
 	private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
-    // TODO: Other methods for managing tags
-
-	@DeleteMapping("/{tagId}/posts/{postId}")
+	@DeleteMapping("/tag/{postId}/{tagId}")
 	public ResponseEntity<?> deleteTagFromPost(@PathVariable @Min(1) Long tagId, @PathVariable @Min(1) Long postId) {
 	    try {
-	        logger.info("Deleting tag with id: " + tagId);
-	        logger.info("Post id: " + postId);
 	        postService.deleteTag(postId, tagId);
 	        return ResponseEntity.ok().build();
 	    } catch (EntityNotFoundException e) {
